@@ -374,12 +374,14 @@ public class ConfigFileManager {
         if (preLoadedDexes.isEmpty()) return null;
         if (moduleClassNames.isEmpty()) return null;
 
-        for (int i = 0; i < moduleClassNames.size(); i++) {
-            var s = moduleClassNames.get(i);
-            if (s.startsWith("de.robv.android.xposed.")) {
-                var signature = ObfuscationManager.getObfuscatedSignature();
-                var name = signature.substring(1).replace("/", ".");
-                moduleClassNames.add(i, s.replace("de.robv.android.xposed.", name));
+        if (obfuscate) {
+            for (int i = 0; i < moduleClassNames.size(); i++) {
+                var s = moduleClassNames.get(i);
+                if (s.startsWith("de.robv.android.xposed.")) {
+                    var signature = ObfuscationManager.getObfuscatedSignature();
+                    var name = signature.substring(1).replace("/", ".");
+                    moduleClassNames.add(i, s.replace("de.robv.android.xposed.", name));
+                }
             }
         }
 
