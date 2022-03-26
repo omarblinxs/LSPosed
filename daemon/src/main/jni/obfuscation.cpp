@@ -40,7 +40,7 @@ using namespace lsplant;
 namespace {
 std::mutex init_lock{};
 std::string obfuscated_signature;
-const std::string old_signature = "Lde/robv/android/xposed";
+const std::string old_signature = "Lde/robv/android/xposed/";
 
 jclass class_file_descriptor;
 jmethodID method_file_descriptor_ctor;
@@ -80,7 +80,7 @@ void maybeInit(JNIEnv *env) {
         out.reserve(length);
         out += "L";
 
-        for (size_t i = 1; i < length; i++) {
+        for (size_t i = 1; i < length - 1; i++) {
             if (choose_slash(rg) > 8 &&                         // 80% alphabet + 20% slashes
                 out[i - 1] != '/' &&                                // slashes could not stick together
                 i != 1 &&                                           // the first character should not be slash
@@ -90,6 +90,8 @@ void maybeInit(JNIEnv *env) {
                 out += chrs[pick(rg)];
             }
         }
+
+        out += "/";
         return out;
     };
 
